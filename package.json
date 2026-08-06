@@ -1,0 +1,32 @@
+{
+  "name": "flowledger",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FlowLedger — a premium, minimal invoice maker with global currency support and one-click PDF export.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "geist": "^1.3.1",
+    "gsap": "^3.12.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.15",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2"
+  }
+}
