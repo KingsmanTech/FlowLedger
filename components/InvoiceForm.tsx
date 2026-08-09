@@ -301,8 +301,48 @@ export function InvoiceForm({
         </div>
       </SectionCard>
 
+      {/* ————— Payment details ————— */}
+      <SectionCard
+        title="Payment details"
+        subtitle="Bank account info shown on the invoice"
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field label="Bank name">
+            <TextInput
+              value={invoice.bankName}
+              onChange={(e) => update({ bankName: e.target.value })}
+              placeholder="Zenith Bank"
+            />
+          </Field>
+          <Field label="Account name">
+            <TextInput
+              value={invoice.accountName}
+              onChange={(e) => update({ accountName: e.target.value })}
+              placeholder="FlowLedger Ltd"
+            />
+          </Field>
+          <Field label="Account number">
+            <TextInput
+              inputMode="numeric"
+              value={invoice.accountNumber}
+              onChange={(e) => update({ accountNumber: e.target.value })}
+              placeholder="0123456789"
+              className="tabular-nums"
+            />
+          </Field>
+          <Field label="Sort code / IBAN">
+            <TextInput
+              value={invoice.bankCode}
+              onChange={(e) => update({ bankCode: e.target.value })}
+              placeholder="Sort code or IBAN"
+              className="tabular-nums"
+            />
+          </Field>
+        </div>
+      </SectionCard>
+
       {/* ————— Notes ————— */}
-      <SectionCard title="Notes" subtitle="Payment terms, bank details, thanks">
+      <SectionCard title="Notes" subtitle="Payment terms, thanks">
         <TextArea
           rows={4}
           value={invoice.notes}

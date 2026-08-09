@@ -20,6 +20,9 @@ export function InvoiceSheet({ invoice }: { invoice: InvoiceData }) {
   const accent = invoice.accentColor || '#4F46E5';
   const { subtotal, discount, tax, shipping, total } = totals;
   const taxRate = parseNum(invoice.taxRate);
+  const paymentDetails = [invoice.bankName, invoice.accountName, invoice.accountNumber, invoice.bankCode].filter(
+    (v) => Boolean(v && v.trim()),
+  );
 
   return (
     <div
@@ -141,8 +144,27 @@ export function InvoiceSheet({ invoice }: { invoice: InvoiceData }) {
         </table>
       </div>
 
-      {/* ————— Totals ————— */}
-      <div className="mt-8 flex justify-end px-14">
+      {/* ————— Payment details + Totals ————— */}
+      <div className="mt-8 flex flex-wrap items-end justify-between gap-x-10 gap-y-6 px-14">
+        {/* Bank / payment info (left), hidden when empty */}
+        {paymentDetails.length > 0 ? (
+          <div className="max-w-[300px]">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+              Payment details
+            </div>
+            <div className="mt-2 space-y-1 text-[13px] leading-relaxed">
+              {invoice.bankName ? (
+                <div className="font-semibold text-gray-900">{invoice.bankName}</div>
+              ) : null}
+              {invoice.accountName ? <div className="text-gray-700">{invoice.accountName}</div> : null}
+              {invoice.accountNumber ? (
+                <div className="tabular-nums text-gray-600">Account: {invoice.accountNumber}</div>
+              ) : null}
+              {invoice.bankCode ? <div className="tabular-nums text-gray-600">{invoice.bankCode}</div> : null}
+            </div>
+          </div>
+        ) : null}
+
         <div className="w-[300px] space-y-2 text-[13px]">
           <div className="flex justify-between">
             <span className="text-gray-500">Subtotal</span>

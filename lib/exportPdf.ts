@@ -71,23 +71,28 @@ export async function exportInvoicePdf(
  */
 export function sendInvoice(invoice: InvoiceData): void {
   const totals = calcTotals(invoice);
-  const subject = `Invoice ${invoice.invoiceNumber} from ${invoice.businessName || 'FlowLedger'}`;
+  const number = invoice.invoiceNumber || 'Draft';
+  const subject = `Invoice ${number} from ${invoice.businessName || 'FlowLedger'}`;
   const items = invoice.items
     .filter((it) => it.description.trim() || parseNum(it.rate) > 0)
     .map(
       (it) =>
         `• ${it.description || 'Item'} — ${it.qty || 0} × ${formatMoney(parseNum(it.rate), invoice.currency)}`,
     );
+  const payment = [invoice.bankName, invoice.accountName, invoice.accountNumber, invoice.bankCode].filter(
+    (v) => Boolean(v && v.trim()),
+  );
 
   const lines = [
     `Hi ${invoice.clientName || 'there'},`,
     '',
-    `Please find invoice ${invoice.invoiceNumber} attached below.`,
+    `Please find invoice ${number} attached below.`,
     '',
     `Amount due: ${formatMoney(totals.total, invoice.currency)}`,
     `Due date: ${formatDate(invoice.dueDate, invoice.currency)}`,
     '',
     ...(items.length ? ['Items:', ...items, ''] : []),
+    ...(payment.length ? ['Payment details:', ...payment, ''] : []),
     'If you have any questions, feel free to reply to this email.',
     '',
     'Best regards,',

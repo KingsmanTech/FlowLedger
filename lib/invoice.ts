@@ -28,30 +28,45 @@ function isoDaysFromNow(days: number): string {
 
 /** A fresh, empty line item row. */
 export function blankItem(): LineItem {
-  return { id: uid(), description: '', qty: '1', rate: '' };
+  return { id: uid(), description: '', qty: '', rate: '' };
 }
 
-/** A brand-new, empty invoice with one starter line item. */
+/**
+ * The deterministic blank invoice the app starts with. Every field is empty
+ * so the form guides the user with placeholders — no prefilled content.
+ * Being a module-level constant (no randomness), server prerender and the
+ * first client render are identical, so there is no hydration mismatch.
+ */
+export const BLANK_INVOICE: InvoiceData = {
+  logo: null,
+  accentColor: '#4F46E5',
+  businessName: '',
+  businessAddress: '',
+  businessEmail: '',
+  businessPhone: '',
+  clientName: '',
+  clientAddress: '',
+  clientEmail: '',
+  invoiceNumber: '',
+  issueDate: '',
+  dueDate: '',
+  currency: 'NGN',
+  items: [{ id: 'starter', description: '', qty: '', rate: '' }],
+  taxRate: '',
+  discount: '',
+  shipping: '',
+  bankName: '',
+  accountName: '',
+  accountNumber: '',
+  bankCode: '',
+  notes: '',
+};
+
+/** A brand-new, empty invoice with one starter line item (for "New"). */
 export function blankInvoice(): InvoiceData {
   return {
-    logo: null,
-    accentColor: '#4F46E5',
-    businessName: '',
-    businessAddress: '',
-    businessEmail: '',
-    businessPhone: '',
-    clientName: '',
-    clientAddress: '',
-    clientEmail: '',
-    invoiceNumber: `FL-${new Date().getFullYear()}-${String(Math.floor(100 + Math.random() * 900))}`,
-    issueDate: isoDaysFromNow(0),
-    dueDate: isoDaysFromNow(14),
-    currency: 'NGN',
-    items: [blankItem()],
-    taxRate: '',
-    discount: '',
-    shipping: '',
-    notes: '',
+    ...BLANK_INVOICE,
+    items: [{ ...BLANK_INVOICE.items[0], id: uid() }],
   };
 }
 
@@ -81,8 +96,11 @@ export const SAMPLE_INVOICE: InvoiceData = {
   taxRate: '7.5',
   discount: '0',
   shipping: '0',
-  notes:
-    'Payment is due within 14 days of the issue date. Transfers may be sent to Zenith Bank, account 1012345678 (FlowLedger Ltd). Thank you for your business!',
+  bankName: 'Zenith Bank',
+  accountName: 'FlowLedger Ltd',
+  accountNumber: '1012345678',
+  bankCode: '057',
+  notes: 'Thank you for your business! Payment is due within 14 days of the issue date.',
 };
 
 /** Compute all financial totals for an invoice. */

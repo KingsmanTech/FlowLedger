@@ -2,17 +2,18 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { BrandMark, DownloadIcon, EyeIcon, RefreshIcon, SendIcon, SpinnerIcon, XIcon } from '@/components/icons';
+import { BrandMark, DownloadIcon, EyeIcon, RefreshIcon, SendIcon, SparklesIcon, SpinnerIcon, XIcon } from '@/components/icons';
 import { InvoiceForm } from '@/components/InvoiceForm';
 import { ExportSheet, InvoicePreview } from '@/components/InvoicePreview';
 import { exportInvoicePdf, sendInvoice } from '@/lib/exportPdf';
 import { useInvoice } from '@/hooks/useInvoice';
+import { SAMPLE_INVOICE } from '@/lib/invoice';
 import { prefersReducedMotion } from '@/lib/motion';
 import type { InvoiceData } from '@/lib/types';
 import { GhostButton, PrimaryButton } from '@/components/ui';
 
 export default function Home() {
-  const { invoice, update, updateItem, addItem, removeItem, reset } = useInvoice();
+  const { invoice, update, updateItem, addItem, removeItem, reset, load } = useInvoice();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -46,6 +47,12 @@ export default function Home() {
     }
   };
 
+  const handleLoadSample = () => {
+    if (window.confirm('Replace the current invoice with the example?')) {
+      load(SAMPLE_INVOICE);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ————— Top bar ————— */}
@@ -68,6 +75,15 @@ export default function Home() {
             >
               <RefreshIcon className="h-4 w-4" />
               New
+            </button>
+            <button
+              type="button"
+              onClick={handleLoadSample}
+              className="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 sm:inline-flex"
+              title="Load the built-in example invoice"
+            >
+              <SparklesIcon className="h-4 w-4" />
+              Example
             </button>
             <GhostButton
               type="button"

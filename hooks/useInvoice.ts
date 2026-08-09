@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { blankInvoice, blankItem, SAMPLE_INVOICE } from '@/lib/invoice';
+import { BLANK_INVOICE, blankInvoice, blankItem } from '@/lib/invoice';
 import type { InvoiceData, LineItem } from '@/lib/types';
 
 const STORAGE_KEY = 'flowledger.invoice.v1';
@@ -15,7 +15,7 @@ function loadStoredInvoice(): InvoiceData | null {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<InvoiceData>;
-      return { ...SAMPLE_INVOICE, ...parsed };
+      return { ...BLANK_INVOICE, ...parsed };
     }
   } catch {
     // Corrupt storage — ignore.
@@ -35,12 +35,15 @@ export interface InvoiceStore {
   removeItem: (id: string) => void;
   /** Clear everything and start a fresh invoice. */
   reset: () => void;
+  /** Replace the whole document (e.g. load the built-in example). */
+  load: (data: InvoiceData) => void;
 }
 
 /** Central state hook: the single source of truth for the invoice document. */
 export function useInvoice(): InvoiceStore {
-  // Always start from the sample so server prerender and first client render match.
-  const [invoice, setInvoice] = useState<InvoiceData>(SAMPLE_INVOICE);
+  // Start from the blank, placeholder-guided document. BLANK_INVOICE is
+  // deterministic, so server prerender and first client render match.
+  const [invoice, setInvoice] = useState<InvoiceData>(BLANK_INVOICE);
   const [hydrated, setHydrated] = useState(false);
 
   // Restore a saved invoice after mount (no hydration mismatch).
@@ -86,5 +89,9 @@ export function useInvoice(): InvoiceStore {
     setInvoice(blankInvoice());
   }, []);
 
-  return { invoice, update, updateItem, addItem, removeItem, reset };
+  const load = useCallback((data: InvoiceData) => {
+    setInvoice(data);
+  }, []);
+
+  return { invoice, update, updateItem, addItem, removeItem, reset, load };
 }

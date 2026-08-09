@@ -56,6 +56,12 @@ export interface InvoiceData {
   discount: string; // flat amount in the invoice currency
   shipping: string; // flat miscellaneous fee
 
+  // Payment / bank details shown on the sheet
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  bankCode: string; // sort code / routing number / IBAN / SWIFT
+
   // Extras
   notes: string;
 }

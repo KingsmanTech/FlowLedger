@@ -21,6 +21,10 @@ custom branding — all in the browser, zero-config on Vercel.
   total due are computed live.
 - **Custom branding** — logo upload (data-URL), business & client details, unique invoice
   numbers, and a selectable accent colour for the rendered sheet.
+- **Payment details** — structured bank/account fields (bank, account name, account number,
+  sort code/IBAN) rendered on the sheet and included in the email summary.
+- **Placeholder-guided start** — every field opens empty with a hint placeholder, so you
+  type your own content; a one-click **Example** button loads a sample invoice to demo.
 - **One-click PDF export** — `html2canvas` + `jsPDF` produce crisp A4 PDFs (multi-page
   supported) from a canonical off-screen sheet instance.
 - **Send by email** — a mailto shortcut composes a ready-to-send invoice summary.
@@ -40,7 +44,7 @@ flowledger/
 │   └── page.tsx                 # Main page — split layout, header, mobile overlay
 ├── components/
 │   ├── CurrencySelect.tsx       # Styled currency selector (NGN featured group)
-│   ├── InvoiceForm.tsx          # Full input form: branding, client, meta, financials
+│   ├── InvoiceForm.tsx          # Full input form: branding, client, meta, financials, payment
 │   ├── InvoicePreview.tsx       # A4 sheet, auto-fit frame, off-screen export sheet
 │   ├── LineItemRow.tsx          # Editable item row with GSAP add/remove animations
 │   ├── LogoUpload.tsx           # Logo upload → data-URL
@@ -115,6 +119,8 @@ so the app is fully static-rendered and needs no serverless functions.
 ## 📝 Notes
 
 - The invoice auto-saves locally; clear it with **New** in the top bar.
+- Fields start empty and show placeholder hints — fill them with your own content, or press
+  **Example** in the top bar to load a pre-filled sample invoice.
 - The default currency is **NGN** (₦) — switch anytime from the *Invoice details* section.
 - The preview renders a fixed-width A4 sheet (794px @ 96dpi) that scales down to fit
   narrow screens; PDF export always captures it at full resolution (2× raster scale).
